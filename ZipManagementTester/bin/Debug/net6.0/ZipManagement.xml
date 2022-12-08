@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ZipManagement</name>
+    </assembly>
+    <members>
+        <member name="T:ZipManagement.LocalFileHeader">
+            <summary>
+            This class represents a Local File Header.
+            </summary>
+            <remarks>
+            <c>0x04034b50</c> is used to represent the start of a LocalFileHeader.
+            </remarks>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.Version">
+            <summary>
+            Gets the version needed to extract the files.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.Flag">
+            <summary>
+            Gets a general purpose bit flag used by PKZip
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.Compression">
+            <summary>
+            Gets the compression method.
+            </summary>
+            <remarks>
+            This compression method is 0 if the file is not compressed, otherwise known as the STORE method.
+            </remarks>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.FileModifiedTime">
+            <summary>
+            Gets the time the file was last modified.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.FileModifiedDate">
+            <summary>
+            Gets the date the file was last modified.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.CRC">
+            <summary>
+            Gets the expected polynomial division modulus from a Cyclic Reducency Check.
+            </summary>
+            <seealso href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy Check</seealso>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.CompressedSize">
+            <summary>
+            Gets the size of the file when compressed.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.UncompressedSize">
+            <summary>
+            Gets the size of the file when uncompressed.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.FileNameLength">
+            <summary>
+            Gets the length of <see cref="P:ZipManagement.LocalFileHeader.FileName"/>.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.ExtraLength">
+            <summary>
+            Gets the length of the extra field data.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.FileName">
+            <summary>
+            Gets the file name.
+            </summary>
+        </member>
+        <member name="P:ZipManagement.LocalFileHeader.ExtraField">
+            <summary>
+            Gets the extra field data as a byte array.
+            </summary>
+        </member>
+        <member name="M:ZipManagement.LocalFileHeader.#ctor(System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.UInt32,System.UInt32,System.UInt32,System.String,System.Byte[])">
+            <summary>
+            This constructor constructs a new LocalFileHeader.
+            It is used internally for the <see cref="M:ZipManagement.ZipReader.GetLocalFileHeader(ZipManagement.CentralDirectoryRecord)"/> method.
+            </summary>
+            <param name="version">The version needed to extract the file.</param>
+            <param name="flag">A general purpose bit flag used by PKZip.</param>
+            <param name="compression">The compression method.</param>
+            <param name="file_modified_time">The last time the file was modified.</param>
+            <param name="file_modified_date">The last date the file was modified.</param>
+            <param name="crc_32">The result for the Cyclic Redundency Check</param>
+            <param name="compressed_size">The compressed size of the file.</param>
+            <param name="uncompressed_size">The uncompressed size of the file.</param>
+            <param name="name">The file name.</param>
+            <param name="extra">Any extra field data as a byte array.</param>
+        </member>
+        <member name="T:ZipManagement.EOCDRecord">
+            <summary>
+            This class represents the End of Central Directory
+            </summary>
+        </member>
+        <member name="T:ZipManagement.ZipReader">
+            <summary>
+            This class reads ZIP files as offers methods for extracting files and folders.
+            </summary>
+        </member>
+        <member name="M:ZipManagement.ZipReader.#ctor(System.IO.Stream)">
+            <summary>
+            This is the default constructor for constructing <see cref="T:ZipManagement.ZipReader"/>s.
+            </summary>
+            <param name="stream">An open stream with read access.</param>
+            <example>
+            In this example we create a <see cref="T:System.IO.Stream"/> and then a <see cref="T:ZipManagement.ZipReader"/> from that stream.
+            <code>
+            Stream stream = new FileStream("Example.zip", FileMode.Open);
+            
+            using (ZipReader reader = new ZipReader(stream)){
+                // Do stuff
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:ZipManagement.ZipReader.GetLocalFileHeader(ZipManagement.CentralDirectoryRecord)">
+            <summary>
+            This method returns a <see cref="T:ZipManagement.LocalFileHeader"/> from a <see cref="T:ZipManagement.CentralDirectoryRecord"/>.
+            </summary>
+            <param name="record">A CentralDirectoryRecord, usually obtained from the <see cref="M:ZipManagement.ZipReader.GetCentralDirectoryRecords(ZipManagement.EOCDRecord)"/> method.</param>
+            <returns>A constructed <see cref="T:ZipManagement.LocalFileHeader"/>.</returns>
+            <exception cref="T:System.ArgumentException">This exception is thrown when the <see cref="P:ZipManagement.CentralDirectoryRecord.FileOffset"/> does not point to the Int32 <c>0x04034b50</c>.</exception>
+            <remarks>
+            It sets BaseStream.Position to the <see cref="T:ZipManagement.CentralDirectoryRecord"/>'s <see cref="P:ZipManagement.CentralDirectoryRecord.FileOffset"/>,
+            then reads the <see cref="T:ZipManagement.LocalFileHeader"/> based on the structure of a PKZip file.
+            </remarks>
+        </member>
+        <member name="M:ZipManagement.ZipReader.GetEOCDRecord">
+            <summary>
+            This method returns the End Of Central Directory Record of the ZipFile.
+            </summary>
+            <returns>The EOCDRecord of the Zip File</returns>
+            <exception cref="T:System.IO.EndOfStreamException">This exception is thrown if the EOCDRecord has not been found due to searching all possible bytes.</exception>
+            <remarks>
+            It scans from the bottom of the PKZip up until it reads an Int16 equal to the offset from the end - 2.
+            Once it reads that Int16, it assumes it's the end of the EOCDRecord and moves the stream position 20 bytes back.
+            If the Int32 it then reads is equal to 0x06054b50 it knows it's read the EOCDRecord.
+            Otherwise it will continue scanning the file from the last offset up.
+            
+            Due to the maximum size of an Int16 being 65535, the EOCDRecord can only be within 65535 + 20 bytes from the end of the file.
+            </remarks>
+        </member>
+        <member name="M:ZipManagement.ZipReader.GetCentralDirectoryRecords(ZipManagement.EOCDRecord)">
+            <summary>
+            This method returns an array of <see cref="T:ZipManagement.CentralDirectoryRecord"/>s from the <see cref="T:ZipManagement.EOCDRecord"/>. 
+            </summary>
+            <param name="eocd"></param>
+            <returns>An array of <see cref="T:ZipManagement.CentralDirectoryRecord"/>s.</returns>
+            <exception cref="T:System.IndexOutOfRangeException">This exception is thrown if any of the <see cref="T:ZipManagement.CentralDirectoryRecord"/>s read from the <see cref="T:ZipManagement.EOCDRecord"/> do not start with <c>0x02014b50</c></exception>
+        </member>
+        <member name="M:ZipManagement.ZipReader.GetEncryptedFile(ZipManagement.CentralDirectoryRecord)">
+            <summary>
+            This method returns a file from the <see cref="T:ZipManagement.CentralDirectoryRecord"/> provided.
+            The file may or may not be encrypted. See the remarks.
+            </summary>
+            <param name="record">The <see cref="T:ZipManagement.CentralDirectoryRecord"/> of the file</param>
+            <returns>An array of bytes containing the file data.</returns>
+            <remarks>
+            If the <see cref="P:ZipManagement.LocalFileHeader.Compression"/> associated with the <see cref="T:ZipManagement.CentralDirectoryRecord"/> is equal to 0, the file will not be encrypted.
+            Otherwise the file will be encrypted with some kind of compression algorithm. The most common being the DEFLATE algorithm.
+            </remarks>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "ZipConsoleSandbox/1.0.0": {
+        "dependencies": {
+          "ZipManagement": "1.0.0"
+        },
+        "runtime": {
+          "ZipConsoleSandbox.dll": {}
+        }
+      },
+      "ZipManagement/1.0.0": {
+        "runtime": {
+          "ZipManagement.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ZipConsoleSandbox/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ZipManagement/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

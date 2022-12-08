@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.WebRequestMethods;
 
 namespace ZipManagement
 {
     /// <summary>
     /// This class represents a Local File Header.
     /// </summary>
+    /// <remarks>
+    /// <c>0x04034b50</c> is used to represent the start of a LocalFileHeader.
+    /// </remarks>
     public class LocalFileHeader
     {
         private ushort _version; // Version needed to extract
@@ -21,55 +25,110 @@ namespace ZipManagement
         private uint _uncompressed_size; // Uncompressed size (or 0xffffffff for ZIP64)
         private string _name;
         private byte[] _extra;
+        /// <summary>
+        /// Gets the version needed to extract the files.
+        /// </summary>
         public ushort Version
         {
             get { return _version; }
         }
+        /// <summary>
+        /// Gets a general purpose bit flag used by PKZip
+        /// </summary>
         public ushort Flag
         {
             get { return _flag; }
         }
+        /// <summary>
+        /// Gets the compression method.
+        /// </summary>
+        /// <remarks>
+        /// This compression method is 0 if the file is not compressed, otherwise known as the STORE method.
+        /// </remarks>
         public ushort Compression
         {
             get { return _compression; }
         }
+        /// <summary>
+        /// Gets the time the file was last modified.
+        /// </summary>
+        // TODO: Update to TimeOnly object
         public ushort FileModifiedTime
         {
             get { return _file_modified_time; }
         }
+        /// <summary>
+        /// Gets the date the file was last modified.
+        /// </summary>
+        // TODO: Update to DateOnly Object
         public ushort FileModifiedDate
         {
             get { return _file_modified_date; }
         }
+        /// <summary>
+        /// Gets the expected polynomial division modulus from a Cyclic Reducency Check.
+        /// </summary>
+        /// <seealso href="https://en.wikipedia.org/wiki/Cyclic_redundancy_check">Cyclic Redundancy Check</seealso>
         public uint CRC
         {
             get { return _crc_32; }
         }
+        /// <summary>
+        /// Gets the size of the file when compressed.
+        /// </summary>
         public uint CompressedSize
         {
             get { return _compressed_size; }
         }
+        /// <summary>
+        /// Gets the size of the file when uncompressed.
+        /// </summary>
         public uint UncompressedSize
         {
             get { return _uncompressed_size; }
         }
+        /// <summary>
+        /// Gets the length of <see cref="FileName"/>.
+        /// </summary>
         public uint FileNameLength
         {
             get { return (uint)FileName.Length; }
         }
+        /// <summary>
+        /// Gets the length of the extra field data.
+        /// </summary>
         public uint ExtraLength
         {
             get { return (uint)ExtraField.Length; }
         }
+        /// <summary>
+        /// Gets the file name.
+        /// </summary>
         public string FileName
         {
             get { return _name; }
         }
+        /// <summary>
+        /// Gets the extra field data as a byte array.
+        /// </summary>
         public byte[] ExtraField
         {
             get { return _extra; }
         }
-
+        /// <summary>
+        /// This constructor constructs a new LocalFileHeader.
+        /// It is used internally for the <see cref="ZipReader.GetLocalFileHeader(CentralDirectoryRecord)"/> method.
+        /// </summary>
+        /// <param name="version">The version needed to extract the file.</param>
+        /// <param name="flag">A general purpose bit flag used by PKZip.</param>
+        /// <param name="compression">The compression method.</param>
+        /// <param name="file_modified_time">The last time the file was modified.</param>
+        /// <param name="file_modified_date">The last date the file was modified.</param>
+        /// <param name="crc_32">The result for the Cyclic Redundency Check</param>
+        /// <param name="compressed_size">The compressed size of the file.</param>
+        /// <param name="uncompressed_size">The uncompressed size of the file.</param>
+        /// <param name="name">The file name.</param>
+        /// <param name="extra">Any extra field data as a byte array.</param>
         public LocalFileHeader(ushort version, ushort flag, ushort compression,
                                ushort file_modified_time, ushort file_modified_date, uint crc_32,
                                uint compressed_size, uint uncompressed_size, string name, byte[] extra)
@@ -86,7 +145,13 @@ namespace ZipManagement
             _extra = extra;
         }
     }
-
+    /// <summary>
+    /// This class represents a Central Directory Record of a Zip File.
+    /// </summary>
+    /// <remarks>
+    /// A central directory record holds the most current information on an encrypted file in the Zip.
+    /// Because of this, a <see cref="LocalFileHeader"/> should not be trusted for most file details, and you should prefer to use this.
+    /// </remarks>
     public class CentralDirectoryRecord
     {
         private ushort _version_madeby;

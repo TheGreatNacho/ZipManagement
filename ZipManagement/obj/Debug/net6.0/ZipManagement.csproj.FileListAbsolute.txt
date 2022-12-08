@@ -1,0 +1,14 @@
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\bin\Debug\net6.0\ZipManagement.deps.json
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\bin\Debug\net6.0\ZipManagement.dll
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\bin\Debug\net6.0\ZipManagement.pdb
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.csproj.AssemblyReference.cache
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.AssemblyInfoInputs.cache
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.AssemblyInfo.cs
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.csproj.CoreCompileInputs.cache
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.dll
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\refint\ZipManagement.dll
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.pdb
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ref\ZipManagement.dll
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\bin\Debug\net6.0\ZipManagement.xml
+C:\Users\TheGreatNacho\source\repos\ZipManagement\ZipManagement\obj\Debug\net6.0\ZipManagement.xml
